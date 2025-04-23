@@ -1,0 +1,4 @@
+# Моделът Gemini
+google-genai
+# Системата за сайта
+streamlit
