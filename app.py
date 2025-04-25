@@ -17,14 +17,18 @@ lang = get_language()
 
 st.set_page_config(page_title=get_translation(lang,"page"), page_icon="🧑‍⚕️", layout="wide", initial_sidebar_state="expanded")
 
-# Скриване на Deploy бутона и иконата с три точки в менюто
+# Скриване на горния колонтитул и задаване на снимка за фон
 st.markdown("""
     <style>
-    /* Скрива бутон Deploy */
-    .stAppDeployButton {display: none;}
-
-    /* Скрива трите точки */
-    .stMainMenu {display: none;}
+    .stAppHeader {display: none;}
+    .stApp {
+            background-image: url("https://sdmntprpolandcentral.oaiusercontent.com/files/00000000-3c44-620a-ab50-0f7ea407a326/raw?se=2025-04-25T21%3A05%3A40Z&sp=r&sv=2024-08-04&sr=b&scid=5f74e091-bba7-5c76-8dc5-0ead068bfcd6&skoid=06d77cea-897f-49c6-9d78-20f6510f72af&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-04-25T16%3A53%3A41Z&ske=2025-04-26T16%3A53%3A41Z&sks=b&skv=2024-08-04&sig=ZqKAN1Xydp3nY2G8ECT3pM9okuWD1SLDWD1KBww6Xbw%3D");
+            background-size: 90% 100%;
+            background-repeat: no-repeat;
+            background-position: top right;
+        }
+    .stBottom,  
+.st-emotion-cache-32nds3  {background: transparent !important;}
     </style>
     """, unsafe_allow_html=True)
 
@@ -92,11 +96,23 @@ def save_current_chat():
 
 # Странична лента със бутони и списък със записани чатове
 with st.sidebar:
-    if st.sidebar.button(get_translation(lang, 'new'), use_container_width=True):
+    if st.sidebar.button(f"💬   {get_translation(lang, 'new')}   💬", use_container_width=True):
         save_current_chat()
         st.session_state.chat_history = []
         st.session_state.loaded_file = None
         st.rerun()
+
+    # Бутон за изтриване на всички чатове
+    if st.sidebar.button(f"🗑️   {get_translation(lang, 'delete')}   🗑️", use_container_width=True, type="secondary"):
+        try:
+            for file in os.listdir(CHAT_DIR):
+                if file.endswith(".txt"):
+                    os.remove(os.path.join(CHAT_DIR, file))
+            st.session_state.chat_history = []
+            st.session_state.loaded_file = None
+            st.rerun()
+        except Exception as e:
+            log_error(e)
 
     st.header(f"💾 {get_translation(lang, 'load')}")
     try:
