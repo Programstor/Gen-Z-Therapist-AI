@@ -19,5 +19,8 @@ A conversational therapist chatbot built using **Streamlit** and a language mode
 
 Install requirements:
 
-```bash
+```bash 
 pip install -r requirements.txt
+```
+## 🗨️ Start app
+Open run.bat
