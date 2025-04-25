@@ -30,7 +30,7 @@ translations = {
         'placeholder': "Tapez quelque chose ici...",
         'new': "Nouveau chat",
         'delete' : "Supprimer les discussions",
-        'load': "Discussions précédentes :"
+        'load': "Discussions précédentes:"
     }
 }
 
