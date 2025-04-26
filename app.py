@@ -22,7 +22,7 @@ st.markdown("""
     <style>
     .stAppHeader {display: none;}
     .stApp {
-            background-image: url("https://sdmntprpolandcentral.oaiusercontent.com/files/00000000-3c44-620a-ab50-0f7ea407a326/raw?se=2025-04-25T21%3A05%3A40Z&sp=r&sv=2024-08-04&sr=b&scid=5f74e091-bba7-5c76-8dc5-0ead068bfcd6&skoid=06d77cea-897f-49c6-9d78-20f6510f72af&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-04-25T16%3A53%3A41Z&ske=2025-04-26T16%3A53%3A41Z&sks=b&skv=2024-08-04&sig=ZqKAN1Xydp3nY2G8ECT3pM9okuWD1SLDWD1KBww6Xbw%3D");
+            background-image: url("https://i.imgur.com/jFXmNPN.png");
             background-size: 90% 100%;
             background-repeat: no-repeat;
             background-position: top right;
