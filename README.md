@@ -23,4 +23,4 @@ Install requirements:
 pip install -r requirements.txt
 ```
 ## 🗨️ Start app
-Open run.bat
+Open [run.bat](./run.bat)
