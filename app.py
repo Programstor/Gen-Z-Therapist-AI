@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 from datetime import datetime
+from datetime import timedelta
 from gemini import response
 import locale
 from localize import get_translation
@@ -82,9 +83,10 @@ def save_current_chat():
                 f.write(first_line)
                 f.write(content)
         else:
-            summary = response(
-                f"Summarize me the conversation in 5 words at max, but not like a sentence, using the language it was mostly written in:\n{content}"
-            ).strip().replace("\n", " ")
+            # Създаване на резюме на разговора
+            summary = response(f"Summarize me the conversation in 4 words at max, NO emojis and NO quotes from the real conversation, using the language it was mostly written in:\n{content}").strip()
+            summary = summary.replace("\n", " ").replace(".", "").replace("\"", "")
+
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             file_path = os.path.join(CHAT_DIR, f"chat_{timestamp}.txt")
             with open(file_path, "w", encoding="utf-8") as f:
@@ -108,20 +110,40 @@ with st.sidebar:
             for file in os.listdir(CHAT_DIR):
                 if file.endswith(".txt"):
                     os.remove(os.path.join(CHAT_DIR, file))
-            st.session_state.chat_history = []
             st.session_state.loaded_file = None
+            st.session_state.chat_history = []
             st.rerun()
         except Exception as e:
             log_error(e)
 
-    st.header(f"💾 {get_translation(lang, 'load')}")
+    st.header(f"  💾 {get_translation(lang, 'load')}")
     try:
+        shown_labels = []
+        today = datetime.now().date()
+        yesterday = today - timedelta(days=1)
+        daybefore = yesterday - timedelta(days=1)
+
         for file in sorted(os.listdir(CHAT_DIR), reverse=True):
             if file.endswith(".txt"):
                 try:
+                    timestamp_formatted = file.split("_")[1]  # "2025-04-26"
+                    chat_date = datetime.strptime(timestamp_formatted, "%Y-%m-%d").date()
+
+                    if chat_date == today:
+                        label = get_translation(lang, "today")  # e.g. "Today"
+                    elif chat_date == yesterday:
+                        label = get_translation(lang, "yesterday")  # e.g. "Yesterday"
+                    else:
+                        label = chat_date.strftime("%d.%m.%Y")  # EU date format
+
+                    if not label in shown_labels:
+                        st.markdown(label)
+                        shown_labels.append(label)
+
                     with open(os.path.join(CHAT_DIR, file), "r", encoding="utf-8") as f:
                         first_line = f.readline()
                         summary = first_line.replace("summary::", "").strip() if first_line.startswith("summary::") else file
+
                     if st.button(summary, use_container_width=True):
                         load_chat(file)
                 except Exception as e:
